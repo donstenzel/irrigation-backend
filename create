@@ -1,5 +1,7 @@
+#!/usr/bin/env -S uiua run
+# vim: set filetype=uiua :
 # Experimental!
-~ "../uiqlite/lib" ~ C! Exec Q!
+~ "git: https://github.com/donstenzel/uiqlite" ~ C! Exec Q!
 
 C!(
   Exec Q!(

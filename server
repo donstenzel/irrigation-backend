@@ -1,6 +1,8 @@
+#!/usr/bin/env -S uiua run
+# vim: set filetype=uiua :
 # Experimental!
 ~ "git: https://github.com/donstenzel/hypertext.ua" ~ Server
-~ "../uiqlite/lib" ~ C! PExec Q!
+~ "git: https://github.com/donstenzel/uiqlite" ~ C! PExec Q!
 
 # U~Database!"storage.db"
 
@@ -9,15 +11,17 @@
 
 # ? humidity db
 Insert ← PExec Humidity!Q!(
-  INSERT INTO Humidity (Level : Timestamp)
-  VALUES ($l : $t).
-) ˜⊟⌊now
+  INSERT INTO Humidity (Timestamp : Level : Unit)
+  VALUES ($t : $l : $u).
+) ⊂⌊now
 
 R ← Server!(
   °⊓"POST" "/"⊸Req!⊃Method Path
-  get"Humidity" °json Req~Data
-  C!˜Insert "storage.db"
-  "204 No Content" [] ""
+  ⍩(°json Req~Data
+    ⬚NaN get{"Humidity" "Unit"}
+    C!˜Insert "storage.db"
+    "204 No Content" [] ""
+  )
 )
 
 Err ← "500 Internal Server Error" [] ⋅""
